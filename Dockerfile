@@ -2,4 +2,4 @@ FROM registry.access.redhat.com/ubi8/python-39
 
 RUN pip3 install python-qpid-proton
 
-CMD /bin/bash
+CMD sleep 10000000
