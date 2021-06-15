@@ -31,8 +31,8 @@ class SendHandler(MessagingHandler):
 
         self.conn_url = conn_url
         self.address = address
-        self.frequency = frequency
-        self.message_count = message_count
+        self.frequency = float(frequency)
+        self.message_count = int(message_count)
 
     def __str__(self):
         self_string =(
