@@ -3,7 +3,6 @@ from __future__ import print_function
 from argparse import ArgumentParser
 from datetime import datetime
 import logging
-from time import sleep
 
 from proton import Message
 from proton.handlers import MessagingHandler
@@ -18,7 +17,6 @@ def read_arguments():
     log.debug('Reading arguments.')
     parser = ArgumentParser()
     parser.add_argument('--connection_url')
-    parser.add_argument('--message_count', type=int, default=0)
     parser.add_argument('--frequency', type=float, default=2.)
     parser.add_argument('--address', default='myqueue')
     arguments = parser.parse_args()
@@ -31,14 +29,13 @@ class SendHandler(MessagingHandler):
 
         self.conn_url = conn_url
         self.address = address
-        self.frequency = float(frequency)
-        self.message_count = int(message_count)
+        self.period = 1./float(frequency)
+        self.sender = None
 
     def __str__(self):
         self_string =(
             f'<SendHandler(connection_url: {self.conn_url}, '
-            f'address: {self.address}, frequency: {self.frequency}, '
-            f'message_count: {self.message_count})>'
+            f'address: {self.address}, period: {self.period}>'
         )
         return self_string
 
@@ -48,29 +45,20 @@ class SendHandler(MessagingHandler):
         # To connect with a user and password:
         # conn = event.container.connect(self.conn_url, user="<user>", password="<password>")
 
-        event.container.create_sender(conn, self.address)
+        self.sender = event.container.create_sender(conn, self.address)
+        self.container = event.reactor
+        self.container.schedule(self.period, self)
 
     def on_link_opened(self, event):
         log.info(f"SEND: Opened sender for target address '{event.sender.target.address}'")
 
-    def on_sendable(self, event):
-        if self.message_count == 0:
-            while True:
-                self.send_once(event)
-        else:
-            for i in range(self.message_count):
-                self.send_once(event)
+    def on_timer_task(self, event):
+        if self.sender.credit:
+            message = Message(generate_message_content())
+            self.sender.send(message)
+            print(f"SEND: Sent message '{message.body}'")
 
-        event.sender.close()
-        event.connection.close()
-
-    def send_once(self, event):
-        message = Message(generate_message_content())
-        event.sender.send(message)
-        print(f"SEND: Sent message '{message.body}'")
-        event.sender.close()
-        sleep(1./self.frequency)
-
+        self.container.schedule(self.period, self)
 
 
 def generate_message_content():
