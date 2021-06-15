@@ -68,6 +68,7 @@ class SendHandler(MessagingHandler):
         message = Message(generate_message_content())
         event.sender.send(message)
         print(f"SEND: Sent message '{message.body}'")
+        event.sender.advance()
         sleep(1./self.frequency)
 
 
