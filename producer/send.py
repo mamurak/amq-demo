@@ -24,7 +24,7 @@ def read_arguments():
 
 
 class SendHandler(MessagingHandler):
-    def __init__(self, conn_url, address, frequency, message_count):
+    def __init__(self, conn_url, address, frequency):
         super(SendHandler, self).__init__()
 
         self.conn_url = conn_url
@@ -66,12 +66,11 @@ def generate_message_content():
     return f"It's {now.ctime()}. That's {now.timestamp()} after T0."
 
 
-def produce_messages(connection_url, address, frequency, message_count):
+def produce_messages(connection_url, address, frequency):
     handler = SendHandler(
         connection_url,
         address,
         frequency,
-        message_count,
     )
     log.info(f'Created {handler}.')
     container = Container(handler)
@@ -85,7 +84,6 @@ if __name__ == "__main__":
             arguments.connection_url,
             arguments.address,
             arguments.frequency,
-            arguments.message_count,
         )
     except KeyboardInterrupt:
         pass
