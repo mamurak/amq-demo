@@ -88,6 +88,7 @@ def produce_messages(connection_url, address, frequency, message_count):
     container = Container(handler)
     container.run()
 
+
 if __name__ == "__main__":
     try:
         arguments = read_arguments()
