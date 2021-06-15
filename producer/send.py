@@ -1,7 +1,7 @@
 from __future__ import print_function
 
 from argparse import ArgumentParser
-from datetime import datetime
+from datetime import datetime, fromtimestamp
 import logging
 
 from proton import Message
@@ -63,7 +63,11 @@ class SendHandler(MessagingHandler):
 
 def generate_message_content():
     now = datetime.now()
-    return f"It's {now.ctime()}. That's {now.timestamp()} after T0."
+    message_string = (
+        f"It's {now.ctime()}. That's {now.timestamp()} "
+        f"seconds after {fromtimestamp(0).date().isoformat()}."
+    )
+    return message_string
 
 
 def produce_messages(connection_url, address, frequency):
