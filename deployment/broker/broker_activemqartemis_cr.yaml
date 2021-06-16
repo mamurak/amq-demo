@@ -5,7 +5,7 @@ metadata:
   application: my-broker
 spec:
   deploymentPlan:
-    size: 4
+    size: 2
     image: placeholder
     requireLogin: false
     persistenceEnabled: true
