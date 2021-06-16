@@ -1,17 +1,16 @@
 apiVersion: broker.amq.io/v2alpha4
 kind: ActiveMQArtemis
 metadata:
-  name: my-broker
-  application: my-broker
+  name: ex-aao
+  application: ex-aao-app
 spec:
-  version: 7.7.0
   deploymentPlan:
-    size: 4
+    size: 1
     image: placeholder
     requireLogin: false
-    persistenceEnabled: true
+    persistenceEnabled: false
     journalType: nio
-    messageMigration: true
+    messageMigration: false
     resources:
       limits:
         cpu: 500m
@@ -52,6 +51,6 @@ spec:
       sniHost: localhost
       expose: true
   upgrades:
-      enabled: true
+      enabled: false
       minor: false
 
