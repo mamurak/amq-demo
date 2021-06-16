@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: amq-producer
+spec:
+  selector:
+    matchLabels:
+      app: amq-producer
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: amq-producer
+    spec:
+      containers:
+        - name: amq-producer
+          image: quay.io/mmurakam/amq-demo-producer:latest
+          envFrom:
+          - configMapRef:
+              name: amq-demo-client-config
