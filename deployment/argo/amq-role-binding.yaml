@@ -7,5 +7,5 @@ subjects:
     name: <service account>
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
+  kind: Role
   name: amq-admin

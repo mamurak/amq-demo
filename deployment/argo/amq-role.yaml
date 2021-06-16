@@ -1,11 +1,11 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: amq-edit
+  name: amq-admin
 rules:
   - apiGroups:
       - 'broker.amq.io'
     resources:
       - '*'
     verbs:
-      - edit
+      - '*'
