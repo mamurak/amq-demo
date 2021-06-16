@@ -7,6 +7,6 @@ ENV MESSAGE_ADDRESS="myqueue"
 ENV FREQUENCY="2.0"
 ENV MESSAGE_COUNT="0"
 
-ADD *.py .
+ADD *.py ./
 
 CMD ["python3", "main.py"]
